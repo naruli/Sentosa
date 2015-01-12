@@ -1,0 +1,4 @@
+C:\Website\dnndev.me\bin\AttractionsCarouselModule.dll
+C:\Website\dnndev.me\bin\AttractionsCarouselModule.pdb
+C:\Website\dnndev.me\DesktopModules\AttractionsCarouselModule\obj\Release\AttractionsCarouselModule.dll
+C:\Website\dnndev.me\DesktopModules\AttractionsCarouselModule\obj\Release\AttractionsCarouselModule.pdb

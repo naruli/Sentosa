@@ -1,0 +1,5 @@
+C:\Website\dnndev.me\bin\AttractionsModule.dll
+C:\Website\dnndev.me\bin\AttractionsModule.pdb
+C:\Website\dnndev.me\DesktopModules\AttractionsModule\obj\Debug\AttractionsModule.dll
+C:\Website\dnndev.me\DesktopModules\AttractionsModule\obj\Debug\AttractionsModule.pdb
+C:\Website\dnndev.me\DesktopModules\AttractionsModule\obj\Debug\AttractionsModule.csprojResolveAssemblyReference.cache
