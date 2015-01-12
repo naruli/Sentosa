@@ -1,0 +1,4 @@
+C:\Website\dnndev.me\bin\ImportantCarouselModule.dll
+C:\Website\dnndev.me\bin\ImportantCarouselModule.pdb
+C:\Website\dnndev.me\DesktopModules\ImportantCarouselModule\obj\Release\ImportantCarouselModule.dll
+C:\Website\dnndev.me\DesktopModules\ImportantCarouselModule\obj\Release\ImportantCarouselModule.pdb

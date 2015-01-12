@@ -1,0 +1,4 @@
+C:\Website\dnndev.me\bin\BeachesModule.dll
+C:\Website\dnndev.me\bin\BeachesModule.pdb
+C:\Website\dnndev.me\DesktopModules\BeachesModule\obj\Release\BeachesModule.dll
+C:\Website\dnndev.me\DesktopModules\BeachesModule\obj\Release\BeachesModule.pdb
