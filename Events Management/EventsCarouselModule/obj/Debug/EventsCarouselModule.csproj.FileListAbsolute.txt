@@ -1,0 +1,5 @@
+C:\Website\dnndev.me\bin\EventsCarouselModule.dll
+C:\Website\dnndev.me\bin\EventsCarouselModule.pdb
+C:\Website\dnndev.me\DesktopModules\EventsCarouselModule\obj\Debug\EventsCarouselModule.csprojResolveAssemblyReference.cache
+C:\Website\dnndev.me\DesktopModules\EventsCarouselModule\obj\Debug\EventsCarouselModule.dll
+C:\Website\dnndev.me\DesktopModules\EventsCarouselModule\obj\Debug\EventsCarouselModule.pdb

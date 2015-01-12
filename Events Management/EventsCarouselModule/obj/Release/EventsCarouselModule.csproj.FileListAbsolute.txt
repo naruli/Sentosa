@@ -1,0 +1,4 @@
+C:\Website\dnndev.me\bin\EventsCarouselModule.dll
+C:\Website\dnndev.me\bin\EventsCarouselModule.pdb
+C:\Website\dnndev.me\DesktopModules\EventsCarouselModule\obj\Release\EventsCarouselModule.dll
+C:\Website\dnndev.me\DesktopModules\EventsCarouselModule\obj\Release\EventsCarouselModule.pdb

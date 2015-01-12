@@ -1,0 +1,4 @@
+C:\Website\dnndev.me\bin\EventModule.dll
+C:\Website\dnndev.me\bin\EventModule.pdb
+C:\Website\dnndev.me\DesktopModules\EventModule\obj\Release\EventModule.dll
+C:\Website\dnndev.me\DesktopModules\EventModule\obj\Release\EventModule.pdb
