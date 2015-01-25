@@ -1,0 +1,4 @@
+C:\Website\dnndev.me\bin\Place.dll
+C:\Website\dnndev.me\bin\Place.pdb
+C:\Website\dnndev.me\DesktopModules\Place\obj\Debug\Place.dll
+C:\Website\dnndev.me\DesktopModules\Place\obj\Debug\Place.pdb
