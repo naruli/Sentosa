@@ -1,4 +1,0 @@
-C:\Website\dnndev.me\bin\AttractionsDetailCarouselModule.dll
-C:\Website\dnndev.me\bin\AttractionsDetailCarouselModule.pdb
-C:\Website\dnndev.me\DesktopModules\AttractionsDetailCarouselModule\obj\Release\AttractionsDetailCarouselModule.dll
-C:\Website\dnndev.me\DesktopModules\AttractionsDetailCarouselModule\obj\Release\AttractionsDetailCarouselModule.pdb

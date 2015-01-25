@@ -1,4 +1,0 @@
-C:\Website\dnndev.me\bin\DiningCarouselModule.dll
-C:\Website\dnndev.me\bin\DiningCarouselModule.pdb
-C:\Website\dnndev.me\DesktopModules\DiningCarouselModule\obj\Release\DiningCarouselModule.dll
-C:\Website\dnndev.me\DesktopModules\DiningCarouselModule\obj\Release\DiningCarouselModule.pdb

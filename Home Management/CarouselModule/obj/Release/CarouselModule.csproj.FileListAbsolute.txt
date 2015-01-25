@@ -1,5 +1,0 @@
-C:\Website\dnndev.me\bin\CarouselModule.dll
-C:\Website\dnndev.me\bin\CarouselModule.pdb
-C:\Website\dnndev.me\DesktopModules\CarouselModule\obj\Release\CarouselModule.dll
-C:\Website\dnndev.me\DesktopModules\CarouselModule\obj\Release\CarouselModule.pdb
-C:\Website\dnndev.me\DesktopModules\CarouselModule\obj\Release\CarouselModule.csprojResolveAssemblyReference.cache

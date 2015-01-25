@@ -1,5 +1,0 @@
-C:\Website\dnndev.me\bin\BeachesDetailCarouselModule.dll
-C:\Website\dnndev.me\bin\BeachesDetailCarouselModule.pdb
-C:\Website\dnndev.me\DesktopModules\BeachesDetailCarouselModule\obj\Debug\BeachesDetailCarouselModule.csprojResolveAssemblyReference.cache
-C:\Website\dnndev.me\DesktopModules\BeachesDetailCarouselModule\obj\Debug\BeachesDetailCarouselModule.dll
-C:\Website\dnndev.me\DesktopModules\BeachesDetailCarouselModule\obj\Debug\BeachesDetailCarouselModule.pdb

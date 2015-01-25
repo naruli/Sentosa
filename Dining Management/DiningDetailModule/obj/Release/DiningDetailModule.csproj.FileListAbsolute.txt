@@ -1,4 +1,0 @@
-C:\Website\dnndev.me\bin\DiningDetailModule.dll
-C:\Website\dnndev.me\bin\DiningDetailModule.pdb
-C:\Website\dnndev.me\DesktopModules\DiningDetailModule\obj\Release\DiningDetailModule.dll
-C:\Website\dnndev.me\DesktopModules\DiningDetailModule\obj\Release\DiningDetailModule.pdb

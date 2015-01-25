@@ -1,4 +1,0 @@
-C:\Website\dnndev.me\bin\HappeningModule.dll
-C:\Website\dnndev.me\bin\HappeningModule.pdb
-C:\Website\dnndev.me\DesktopModules\HappeningModule\obj\Release\HappeningModule.dll
-C:\Website\dnndev.me\DesktopModules\HappeningModule\obj\Release\HappeningModule.pdb

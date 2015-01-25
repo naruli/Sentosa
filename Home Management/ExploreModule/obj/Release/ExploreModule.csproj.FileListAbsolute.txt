@@ -1,4 +1,0 @@
-C:\Website\dnndev.me\bin\ExploreModule.dll
-C:\Website\dnndev.me\bin\ExploreModule.pdb
-C:\Website\dnndev.me\DesktopModules\ExploreModule\obj\Release\ExploreModule.dll
-C:\Website\dnndev.me\DesktopModules\ExploreModule\obj\Release\ExploreModule.pdb

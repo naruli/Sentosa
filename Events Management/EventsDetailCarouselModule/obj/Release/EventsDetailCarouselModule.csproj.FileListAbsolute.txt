@@ -1,4 +1,0 @@
-C:\Website\dnndev.me\bin\EventsDetailCarouselModule.dll
-C:\Website\dnndev.me\bin\EventsDetailCarouselModule.pdb
-C:\Website\dnndev.me\DesktopModules\EventsDetailCarouselModule\obj\Release\EventsDetailCarouselModule.dll
-C:\Website\dnndev.me\DesktopModules\EventsDetailCarouselModule\obj\Release\EventsDetailCarouselModule.pdb

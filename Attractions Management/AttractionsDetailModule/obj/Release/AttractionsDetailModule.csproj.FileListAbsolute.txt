@@ -1,4 +1,0 @@
-C:\Website\dnndev.me\bin\AttractionsDetailModule.dll
-C:\Website\dnndev.me\bin\AttractionsDetailModule.pdb
-C:\Website\dnndev.me\DesktopModules\AttractionsDetailModule\obj\Release\AttractionsDetailModule.dll
-C:\Website\dnndev.me\DesktopModules\AttractionsDetailModule\obj\Release\AttractionsDetailModule.pdb

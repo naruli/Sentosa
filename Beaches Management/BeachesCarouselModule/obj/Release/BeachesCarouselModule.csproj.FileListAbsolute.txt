@@ -1,4 +1,0 @@
-C:\Website\dnndev.me\bin\BeachesCarouselModule.dll
-C:\Website\dnndev.me\bin\BeachesCarouselModule.pdb
-C:\Website\dnndev.me\DesktopModules\BeachesCarouselModule\obj\Release\BeachesCarouselModule.dll
-C:\Website\dnndev.me\DesktopModules\BeachesCarouselModule\obj\Release\BeachesCarouselModule.pdb

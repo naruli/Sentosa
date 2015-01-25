@@ -1,4 +1,0 @@
-C:\Website\dnndev.me\bin\EventsDetailModule.dll
-C:\Website\dnndev.me\bin\EventsDetailModule.pdb
-C:\Website\dnndev.me\DesktopModules\EventsDetailModule\obj\Release\EventsDetailModule.dll
-C:\Website\dnndev.me\DesktopModules\EventsDetailModule\obj\Release\EventsDetailModule.pdb
