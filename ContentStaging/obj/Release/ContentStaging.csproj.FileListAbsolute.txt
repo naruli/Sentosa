@@ -1,0 +1,4 @@
+C:\Website\dnndev.me\bin\ContentStaging.dll
+C:\Website\dnndev.me\bin\ContentStaging.pdb
+C:\Website\dnndev.me\DesktopModules\ContentStaging\obj\Release\ContentStaging.dll
+C:\Website\dnndev.me\DesktopModules\ContentStaging\obj\Release\ContentStaging.pdb
