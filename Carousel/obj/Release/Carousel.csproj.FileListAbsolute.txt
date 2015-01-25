@@ -1,0 +1,4 @@
+C:\Website\dnndev.me\bin\Carousel.dll
+C:\Website\dnndev.me\bin\Carousel.pdb
+C:\Website\dnndev.me\DesktopModules\Carousel\obj\Release\Carousel.dll
+C:\Website\dnndev.me\DesktopModules\Carousel\obj\Release\Carousel.pdb
