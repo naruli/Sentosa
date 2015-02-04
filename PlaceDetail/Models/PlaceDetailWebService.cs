@@ -50,7 +50,7 @@ namespace Sentosa.Modules.PlaceDetail.Models
         {
             try
             {
-                var subPageDetail = new PlaceDetailController().GetSubMenuPlace(TabId).ToJson();
+                var subPageDetail = new PlaceDetailController().GetSubPagePlace(TabId).ToJson();
                 return Request.CreateResponse(HttpStatusCode.OK, subPageDetail);
             }
             catch (Exception exc)

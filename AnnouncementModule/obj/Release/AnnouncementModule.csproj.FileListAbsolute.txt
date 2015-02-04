@@ -1,0 +1,4 @@
+C:\Website\dnndev.me\bin\AnnouncementModule.dll
+C:\Website\dnndev.me\bin\AnnouncementModule.pdb
+C:\Website\dnndev.me\DesktopModules\AnnouncementModule\obj\Release\AnnouncementModule.dll
+C:\Website\dnndev.me\DesktopModules\AnnouncementModule\obj\Release\AnnouncementModule.pdb

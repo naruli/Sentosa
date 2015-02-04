@@ -9,10 +9,21 @@ namespace Sentosa.Modules.Place.Models
 {
     public class PlaceController
     {
-        public IList<Place> GetPlace(string groupname, int offset, int limit, string searchValue, string sortBy)
+        public IList<Place> GetPlace(string groupname, int offset, int limit, string searchValue, string sortBy, string list)
         {
             int TabId = CBO.FillCollection<TypePage>(DataProvider.Instance().ExecuteReader("GetTypePage")).Where(y => y.Name.ToLower().Equals(groupname.ToLower())).Select(x => x.TabId).FirstOrDefault();
             var place = CBO.FillCollection<Place>(DataProvider.Instance().ExecuteReader("GetPlace")).Where(x => x.ParentId == TabId).OrderBy(y => y.TabName);
+            if (groupname.ToLower().Equals("events"))
+            {
+                place = place.Where(x => DateTime.Now.Date >= (!String.IsNullOrEmpty(x.EventStartDate) ? Convert.ToDateTime(x.EventStartDate).Date : DateTime.Now.Date) && DateTime.Now.Date <= (!String.IsNullOrEmpty(x.EventEndDate) ? Convert.ToDateTime(x.EventEndDate).Date : DateTime.Now.Date)).OrderBy(y => y.TabName);
+            }
+            if (!list.Equals("0"))
+            {
+                int[] listed = list.Split(',').Select(int.Parse).ToArray();
+                int[] dupTabId = CBO.FillCollection<TagPlace>(DataProvider.Instance().ExecuteReader("GetTagTab")).Where(x => listed.Contains(x.TagId)).Select(x => x.TabId).ToArray();
+                int[] tabId = dupTabId.Distinct().ToArray();
+                place = place.Where(x => tabId.Contains(x.TabID)).OrderBy(y => y.TabName);
+            }
             if (!String.IsNullOrEmpty(searchValue))
             {
                 place = place.Where(x => x.TabName.ToLower().Contains(searchValue.ToLower())).OrderBy(y => y.TabName);
@@ -28,7 +39,7 @@ namespace Sentosa.Modules.Place.Models
                     case "description": place = place.OrderBy(y => y.ShortDescription);
                         break;
 
-                    case "date": place = place.OrderBy(y => y.CreatedOnDate);
+                    case "date": place = place.OrderByDescending(y => y.CreatedOnDate);
                         break;
                 }
             }

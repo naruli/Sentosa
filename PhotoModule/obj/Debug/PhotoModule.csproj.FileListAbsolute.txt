@@ -1,0 +1,5 @@
+C:\Website\dnndev.me\bin\PhotoModule.dll
+C:\Website\dnndev.me\bin\PhotoModule.pdb
+C:\Website\dnndev.me\DesktopModules\PhotoModule\obj\Debug\PhotoModule.dll
+C:\Website\dnndev.me\DesktopModules\PhotoModule\obj\Debug\PhotoModule.pdb
+C:\Website\dnndev.me\DesktopModules\PhotoModule\obj\Debug\PhotoModule.csprojResolveAssemblyReference.cache

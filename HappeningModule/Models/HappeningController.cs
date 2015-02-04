@@ -50,6 +50,16 @@ namespace Sentosa.Modules.HappeningModule.Models
             DataProvider.Instance().ExecuteNonQuery("DeleteHappening", TabId);
         }
 
+        public IList<Place> GetContentHappeningEvent()
+        {
+            return GetContentHappening().Where(x => x.TypeHappening.Equals("P_EVENT")).ToList();
+        }
+
+        public IList<Place> GetContentHappeningPromotion()
+        {
+            return GetContentHappening().Where(x => x.TypeHappening.Equals("P_PROMO")).ToList();
+        }
+
         public IList<Place> GetContentHappening()
         {
             IList<TypePage> typePage = CBO.FillCollection<TypePage>(DataProvider.Instance().ExecuteReader("GetTypePage"));

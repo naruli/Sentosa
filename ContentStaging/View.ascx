@@ -1,5 +1,5 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="View.ascx.cs" Inherits="Sentosa.Modules.ContentStaging.View" %>
-<!-- Carousel -->
+<!-- ContentStaging -->
     <%@ Register TagName="label" TagPrefix="dnn" Src="~/controls/labelcontrol.ascx" %>
     <%@ Register TagName="FilePicker" TagPrefix="dnn" Src="~/controls/filepickeruploader.ascx" %>
     <%@ Register Src="~/controls/SectionHeadControl.ascx" TagName="SectionHead" TagPrefix="dnn" %>
@@ -100,6 +100,25 @@
             }
         });
     }
+
+    function updateSubPage(obj) {
+
+        var id = obj.getAttribute('data-id').split('.');
+        $.getJSON(
+           "<%=(Request.ApplicationPath.Equals("/") ? "" : Request.ApplicationPath)%>/DesktopModules/ContentStaging/API/ModuleContentStaging/GetSubPagePlace?Id=" + id[0],
+           function (result) {
+               var parsedTaskJSONObject = jQuery.parseJSON(result);
+               $.each(parsedTaskJSONObject, function () {
+                   $('#<%= IdSubPage.ClientID %>').val(this.Id);
+                   $('#<%= SubPageTitle.ClientID %>').val(this.Title);
+                   $('#' + id[1]).val(this.Description);
+               });
+           });
+        
+        $('#AddMode').hide();
+        $('#EditMode').show();
+        //alert('update shop' + obj.getAttribute('data-id'));
+    }
 </script>
 
     <div class="dnnFormItem">
@@ -134,13 +153,21 @@
                     <table id="CarouselTable" style="width:100%;border:1px solid black;text-align:center">
                         <thead style="border:1px solid black;">
                             <tr>
-                                <td style="width:50%">Image Preview</td>
-                                <td style="width:50%">Action</td>
+                                <td style="width:30%">Image Preview</td>
+                                <td style="width:70%">Action</td>
                             </tr>
                         </thead>
                         <tbody style="border:1px solid black;">
                         </tbody>
                     </table>
+                </div>
+                <div class="dnnFormItem">
+                    <dnn:label ID="Label61" runat="server" Text="" />
+                    <asp:HiddenField ID="ListCarousel" Value="0" runat="server" />
+                </div>
+                <div class="dnnFormItem">
+                    <dnn:label ID="Label62" runat="server" Text="" />
+                    <asp:Button ID="CarouselOrderSave" CssClass="dnnPrimaryAction" OnClick="CarouselOrderSave_Click" Text="Save Order" runat="server" />
                 </div>
             </fieldset>
         </div>
@@ -149,7 +176,7 @@
             <fieldset class="dnnClear">
                 <div class="dnnFormItem">
                     <dnn:label ID="Label6" runat="server" Text="Short Description" />
-                    <dnn:TextEditor ID="ContentShortDesc" runat="server" Height="500" Width="100%" />
+                    <asp:TextBox ID="ContentShortDesc" TextMode="MultiLine" runat="server" />
                 </div>
                 <div class="dnnFormItem">
                     <dnn:label ID="Label7" runat="server" Text="Admission" />
@@ -180,6 +207,10 @@
                     <asp:DropDownList id="ContentLanguage" runat="server">
                
                     </asp:DropDownList>
+                </div>
+                <div class="dnnFormItem">
+                    <dnn:label ID="Label58" runat="server" Text="Online Store Url" />
+                    <asp:TextBox ID="ContentSourceUrl" runat="server" />
                 </div>
                 <div class="dnnFormItem">
                     <dnn:label ID="Label14" runat="server" Text="Highlights" />
@@ -314,6 +345,12 @@
                     <dnn:FilePicker ID="ContentImage" runat="server" />
                 </div>
                 <div class="dnnFormItem">
+                    <dnn:label ID="Label50" runat="server" Text="Tag" />
+                    <asp:CheckBoxList id="ContentTag" RepeatDirection="Horizontal" RepeatColumns="4" RepeatLayout="Flow" runat="server">
+
+                    </asp:CheckBoxList>
+                </div>
+                <div class="dnnFormItem">
                     <dnn:label ID="Label41" runat="server" Text="Category" />
                     <asp:DropDownList id="ContentCategory" runat="server">
                
@@ -365,13 +402,79 @@
                     <table id="GalleryTable" style="width:100%;border:1px solid black;text-align:center">
                         <thead style="border:1px solid black;">
                             <tr>
-                                <td style="width:50%">Preview</td>
-                                <td style="width:50%">Action</td>
+                                <td style="width:30%">Preview</td>
+                                <td style="width:70%">Action</td>
                             </tr>
                         </thead>
                         <tbody style="border:1px solid black;">
                         </tbody>
                     </table>
+                </div>
+                <div class="dnnFormItem">
+                    <dnn:label ID="Label59" runat="server" Text="" />
+                    <asp:HiddenField ID="ListPhoto" Value="0" runat="server" />
+                    <asp:HiddenField ID="ListVideo" Value="0" runat="server" />
+                </div>
+                <div class="dnnFormItem">
+                    <dnn:label ID="Label60" runat="server" Text="" />
+                    <asp:Button ID="GalleryOrderSave" CssClass="dnnPrimaryAction" OnClick="GalleryOrderSave_Click" Text="Save Order" runat="server" />
+                </div>
+            </fieldset>
+        </div>
+        <div id="SubPageMenu" style="display:none;">
+            <h2 id="SubPage" class="dnnFormSectionHead"><a href="#">Sub Page</a></h2>
+            <fieldset class="dnnClear">
+                <div class="dnnFormItem">
+                    <dnn:label ID="Label51" runat="server" Text="" />
+                    <asp:HiddenField ID="IdSubPage" runat="server" />
+                </div>
+                <div class="dnnFormItem">
+                    <dnn:label ID="Label52" runat="server" Text="Title" />
+                    <asp:TextBox ID="SubPageTitle" runat="server" />
+                </div>
+                <div class="dnnFormItem">
+                    <dnn:label ID="Label53" runat="server" Text="Description" />
+                    <dnn:TextEditor ID="SubPageDescription" runat="server" Height="500" Width="100%" />
+                </div>
+                <div class="dnnFormItem">
+                    <dnn:label ID="Label54" runat="server" Text="" />
+                    <asp:Button ID="SubPageSave" CssClass="dnnPrimaryAction" OnClick="SubPageSave_Click" Text="Add Sub Page" runat="server" />
+                </div>
+                <div class="dnnFormItem">
+                    <dnn:label ID="Label55" runat="server" Text="" />
+                    <asp:Button ID="SubPageEdit" CssClass="dnnPrimaryAction" OnClick="SubPageEdit_Click" Text="Edit Sub Page" runat="server" />
+                </div>
+                <div class="dnnFormItem">
+                    <dnn:label ID="Label56" runat="server" Text="Sub Page" />
+                    <asp:DropDownList id="SubPageList" OnSelectedIndexChanged="SubPageList_SelectedIndexChanged" AutoPostBack="true" runat="server">
+               
+                    </asp:DropDownList>
+                </div>
+                <div class="dnnFormItem">
+                    <dnn:label ID="Label57" runat="server" Text="" />
+                    <asp:Button ID="SubPageDelete" CssClass="dnnPrimaryAction" OnClick="SubPageDelete_Click" Text="Delete Sub Page" runat="server" />
+                </div>
+                <div class="dnnFormItem">
+                    <dnn:label ID="Label64" runat="server" Text="" />
+                    <table id="SubPageTable" style="width:50%;border:1px solid black;text-align:center">
+                        <thead style="border:1px solid black;">
+                            <tr>
+                                <td style="width:20%">No.</td>
+                                <td style="width:40%">Title</td>
+                                <td style="width:40%">Order</td>
+                            </tr>
+                        </thead>
+                        <tbody style="border:1px solid black;">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="dnnFormItem">
+                    <dnn:label ID="Label65" runat="server" Text="" />
+                    <asp:HiddenField ID="ListSubPage" Value="0" runat="server" />
+                </div>
+                <div class="dnnFormItem">
+                    <dnn:label ID="Label63" runat="server" Text="" />
+                    <asp:Button ID="SubPageOrderSave" CssClass="dnnPrimaryAction" OnClick="SubPageOrderSave_Click" Text="Save Order" runat="server" />
                 </div>
             </fieldset>
         </div>

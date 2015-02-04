@@ -1,0 +1,4 @@
+C:\Website\dnndev.me\bin\PhotoModule.dll
+C:\Website\dnndev.me\bin\PhotoModule.pdb
+C:\Website\dnndev.me\DesktopModules\PhotoModule\obj\Release\PhotoModule.dll
+C:\Website\dnndev.me\DesktopModules\PhotoModule\obj\Release\PhotoModule.pdb

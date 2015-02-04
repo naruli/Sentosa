@@ -109,4 +109,11 @@ namespace Sentosa.Modules.Place.Models
         public int TypeId { get; set; }
         public string TagName { get; set; }
     }
+
+    public class TagPlace
+    {
+        public int Id { get; set; }
+        public int TabId { get; set; }
+        public int TagId { get; set; }
+    }
 }

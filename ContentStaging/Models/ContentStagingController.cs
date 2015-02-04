@@ -26,6 +26,11 @@ namespace Sentosa.Modules.ContentStaging.Models
             return CBO.FillCollection<TypePage>(DataProvider.Instance().ExecuteReader("GetTypePage")).Where(y => y.Name.ToLower().Equals(groupName.ToLower())).Select(x => x.TabId).FirstOrDefault();
         }
 
+        public int GetTypePage(int tabId)
+        {
+            return CBO.FillCollection<TypePage>(DataProvider.Instance().ExecuteReader("GetTypePage")).Where(y => y.TabId == tabId).Select(x => x.TypeId).FirstOrDefault();
+        }
+
         public IList<TypePage> GetTypePages()
         {
             return CBO.FillCollection<TypePage>(DataProvider.Instance().ExecuteReader("GetTypePage")).ToList();
@@ -155,6 +160,15 @@ namespace Sentosa.Modules.ContentStaging.Models
                                                         );
         }
 
+        public void UpdateCarousel(CarouselPhoto carousel)
+        {
+            //return photo id
+            carousel.Id = DataProvider.Instance().ExecuteScalar<int>("UpdateCarouselPhotos",
+                                                      carousel.Id,//id
+                                                      carousel.OrderCarousel//order
+                                                        );
+        }
+
 
         public void DeleteCarousel(CarouselPhoto carousel)
         {
@@ -203,6 +217,26 @@ namespace Sentosa.Modules.ContentStaging.Models
 
         }
 
+        public void UpdateGalleryOrder(Gallery gallery)
+        {
+            if (gallery.Type == TYPE_PHOTOS)//is photo
+            {
+                gallery.Id = DataProvider.Instance().ExecuteScalar<int>("UpdateGalleryPhotos",
+                                                     gallery.Id,
+                                                     gallery.OrderGallery
+                                                       );
+            }
+            else if (gallery.Type == TYPE_VIDEO) //is video 
+            {
+                gallery.Id = DataProvider.Instance().ExecuteScalar<int>("UpdateGalleryVideos",
+                                                     gallery.Id,
+                                                     gallery.OrderGallery
+                                                       );
+            }
+
+
+        }
+
         public void DeleteGallery(Gallery gallery)
         {
 
@@ -241,6 +275,72 @@ namespace Sentosa.Modules.ContentStaging.Models
             }
 
 
+        }
+
+        public IList<Tag> GetTags(int TabId)
+        {
+            int TypeId = GetTypePage(TabId);
+            return CBO.FillCollection<Tag>(DataProvider.Instance().ExecuteReader("GetTag")).Where(x => x.TypeId == TypeId && x.LanguageId == 1).OrderBy(y => y.Tagname).ToList();
+        }
+
+        public IList<TagPlace> GetTagPlace(int TabId)
+        {
+            return CBO.FillCollection<TagPlace>(DataProvider.Instance().ExecuteReader("GetTagTab")).Where(x => x.TabId == TabId).OrderBy(y => y.TagId).ToList();
+        }
+
+        public void AddTagPlace(TagPlace tagPlace)
+        {
+            tagPlace.Id = DataProvider.Instance().ExecuteScalar<int>("AddTagTab",
+                                                    tagPlace.TabId,
+                                                    tagPlace.TagId
+                                                     );
+        }
+
+        public void DeleteTagPlace(int TabId)
+        {
+            DataProvider.Instance().ExecuteNonQuery("DeleteTagTab", TabId);
+        }
+
+        public IList<SubPagePlace> GetSubPagePlaces(int _TabId)
+        {
+            return CBO.FillCollection<SubPagePlace>(DataProvider.Instance().ExecuteReader("GetSubPage")).Where(x => x.TabId == _TabId).ToList();
+        }
+
+        public IList<SubPagePlace> GetSubPagePlace(int _Id)
+        {
+            return CBO.FillCollection<SubPagePlace>(DataProvider.Instance().ExecuteReader("GetSubPage")).Where(x => x.Id == _Id).ToList();
+        }
+
+        public void AddSubPagePlace(SubPagePlace subPagePlace)
+        {
+            subPagePlace.Id = DataProvider.Instance().ExecuteScalar<int>("AddSubPage",
+                                                    subPagePlace.TabId,
+                                                    subPagePlace.Title,
+                                                    subPagePlace.Description
+                                                     );
+        }
+
+        public void UpdateSubPagePlace(SubPagePlace subPagePlace)
+        {
+            subPagePlace.Id = DataProvider.Instance().ExecuteScalar<int>("UpdateSubPage",
+                                                    subPagePlace.Id,
+                                                    subPagePlace.TabId,
+                                                    subPagePlace.Title,
+                                                    subPagePlace.Description
+                                                     );
+        }
+
+        public void UpdateOrderSubPagePlace(SubPagePlace subPagePlace)
+        {
+            subPagePlace.Id = DataProvider.Instance().ExecuteScalar<int>("UpdateOrderSubPage",
+                                                    subPagePlace.Id,
+                                                    subPagePlace.OrderSubPage
+                                                     );
+        }
+
+        public void DeleteSubPagePlace(int Id)
+        {
+            DataProvider.Instance().ExecuteNonQuery("DeleteSubPage", Id);
         }
     }
 }

@@ -1,0 +1,4 @@
+C:\Website\dnndev.me\bin\Zone.dll
+C:\Website\dnndev.me\bin\Zone.pdb
+C:\Website\dnndev.me\DesktopModules\Zone\obj\Release\Zone.dll
+C:\Website\dnndev.me\DesktopModules\Zone\obj\Release\Zone.pdb

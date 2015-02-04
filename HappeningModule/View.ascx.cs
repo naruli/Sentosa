@@ -38,7 +38,24 @@ namespace Sentosa.Modules.HappeningModule
         {
             try
             {
+                var modules = new ModuleController();
+                if (!Settings.Contains("HappeningTitle"))
+                {
+                    modules.UpdateModuleSetting(ModuleId, "HappeningTitle", "Something special happening in the State");
+                    Header.InnerText = "Something special happening in the State";
+                }
 
+                if (Settings.Contains("HappeningTitle"))
+                    Header.InnerText = Settings["HappeningTitle"].ToString();
+
+                if (!Settings.Contains("HappeningDesc"))
+                {
+                    modules.UpdateModuleSetting(ModuleId, "HappeningDesc", "Fun is all around in this State. Find out what is happening around Sentosa.");
+                    Description.InnerText = "Fun is all around in this State. Find out what is happening around Sentosa.";
+                }
+
+                if (Settings.Contains("HappeningDesc"))
+                    Description.InnerText = Settings["HappeningDesc"].ToString();
             }
             catch (Exception exc) //Module failed to load
             {

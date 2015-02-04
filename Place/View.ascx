@@ -21,6 +21,7 @@
         var searchValue = "<%=(Request.Params["keywords"] != null ? Request.Params["keywords"].ToString() : "")%>";
         var list = "<%=(Request.Params["list"] != null ? Request.Params["list"].ToString() : "0")%>";
         var sortBy = "<%=(Request.Params["sort-by"] != null ? Request.Params["sort-by"].ToString() : "name")%>";
+        var isMap = "<%=(Request.QueryString["showMap"] != null ? Request.QueryString["showMap"].ToString():"no")%>";
 
         var groupName = "";
         var url = theForm.action.toLowerCase();
@@ -63,32 +64,33 @@
         else if (url.indexOf("plan") > -1) {
             groupName = "plan your itinerary";
         }
-
+        $('#keywords').attr('placeholder', 'Search within ' + groupName);
         listPlace(groupName, list);
-        searchPlace(searchValue, list, offset, limit, groupName, sortBy);
-        showGrid();
+        searchPlace(searchValue, list, offset, limit, groupName, sortBy, isMap);
 
         $('#keywords').val(searchValue);
         //console.log(offset);
         //console.log('Parameter : ' + searchValue + ', ' + sortBy + ', ' + list);
+
+
     });
 
-    function searchPlace(paramSearch, paramList, paramOffset, paramLimit, paramGroup, paramSortBy) {
+    function searchPlace(paramSearch, paramList, paramOffset, paramLimit, paramGroup, paramSortBy, paramIsMap) {
         $.getJSON(
-            "<%=(Request.ApplicationPath.Equals("/") ? "" : Request.ApplicationPath)%>/DesktopModules/Place/API/ModulePlace/GetPlace?groupname=" + paramGroup + "&offset=" + paramOffset + "&limit=" + paramLimit + "&searchValue=" + paramSearch +"&sortBy=" + paramSortBy,
+            "<%=(Request.ApplicationPath.Equals("/") ? "" : Request.ApplicationPath)%>/DesktopModules/Place/API/ModulePlace/GetPlace?groupname=" + paramGroup + "&offset=" + paramOffset + "&limit=" + paramLimit + "&searchValue=" + paramSearch + "&sortBy=" + paramSortBy + "&list=" + paramList,
            function (result) {
                var parsedTaskJSONObject = jQuery.parseJSON(result);
                $('section#page .container').html('');
                $('section#page .container').append(
-                   '<div class="row page-nav">' + 
+                   '<div class="row page-nav">' +
                         '<div class="col-xs-4 col-md-9">' +
                             '<span id="result" class="nav-title"></span>' +
                         '</div>' +
                         '<div class="col-xs-8 col-md-3 nopadding padding-xs">' +
-                            '<div class="form-sort">' +
+                            '<div class="form-sort"' + (paramIsMap == "yes" ? ' style="display:none;"' : '') + '>' +
                                 '<label>Sort by:</label>' +
                                 '<div class="select-wrapper">' +
-                                    '<select id="sorting" name="sort-by" class="form-control">' +
+                                    '<select id="sorting" name="sort-by" class="form-control" onchange="searchByTrigger();">' +
                                         '<option value="name"' + (paramSortBy == "name" ? " selected" : "") + '>Name</option>' +
                                         '<option value="description"' + (paramSortBy == "description" ? " selected" : "") + '>Description</option>' +
                                         '<option value="date"' + (paramSortBy == "date" ? " selected" : "") + '>Date</option>' +
@@ -105,19 +107,19 @@
                    if (counter == 0) {
                        total = this.Total;
                    }
-                   if(counter % 4 == 0) {
+                   if (counter % 4 == 0) {
                        row++;
                        $('section#page .container').append(
-                           '<div class="row page_' + row + '">' +
+                           '<div class="row page_' + row + '"' + (paramIsMap == "yes" ? ' style="display:none;"' : '') + '>' +
                            '</div>'
                            );
                    }
                    var shortDesc = krDencodeEntities(this.ShortDescription);
                    $('section#page .container .page_' + row).append(
-                       '<div class="col-xs-12 col-sm-6 col-md-3">' +
+                       '<div class="col-xs-12 col-sm-6 col-md-3" style="z-index:1;">' +
                             '<div class="box-item">' +
                                 '<a href="' + this.Url + '">' +
-                                    '<img src="' + this.Photo + '" alt="" title="" class="">' +
+                                    '<img src="' + this.Photo + '" alt="" title="" class="" style="height:20%;width:100%;">' +
                                     '<div class="box-content">' +
                                         '<h3>' + this.TabName + '</h3>' +
                                         '<p>' + shortDesc.trunc(150, true) + '</p>' +
@@ -127,7 +129,7 @@
                                     '<a href="' + this.Url + '">' +
                                     '</a>' +
                                     '<a href="#"><img src="<%=(Request.ApplicationPath.Equals("/") ? "" : Request.ApplicationPath)%>/portals/_default/skins/hammerflex/img/icon-map-red.png" alt="" title="" class=""></a>' +
-                                    (this.SourceUrl != "" ? '<a href="http://' + this.SourceUrl + '" target="_blank"><img src="<%=(Request.ApplicationPath.Equals("/") ? "" : Request.ApplicationPath)%>/portals/_default/skins/hammerflex/img/icon-tag.png" alt="" title="" class=""></a>' : '') +
+                                    (this.SourceUrl != "" ? '<a href="' + this.SourceUrl + '" target="_blank"><img src="<%=(Request.ApplicationPath.Equals("/") ? "" : Request.ApplicationPath)%>/portals/_default/skins/hammerflex/img/icon-tag.png" alt="" title="" class=""></a>' : '') +
                                     '<a href="' + this.Url + '">Find out more <i class="fa fa-angle-right"></i></a>' +
                                  '</div>' +
                              '</div>' +
@@ -138,7 +140,7 @@
                });
                if (counter > 0) {
                    $('section#page .container').append(
-                       '<div class="row">' +
+                       '<div class="row"' + (paramIsMap == "yes" ? ' style="display:none;"' : '') + '>' +
                             '<div class="col-xs-12">' +
                                 '<input type="hidden" name="search-by-grid" id="grid" value="" />' +
                                 '<input type="hidden" name="page-nav-list" id="search-page" value="" />' +
@@ -155,6 +157,11 @@
                                 '<li><a href="#">Prev</a></li>'
                            );
                        }
+                       else {
+                           $('#nav-paging').append(
+                                '<li style="display:none"><a href="#">Prev</a></li>'
+                           );
+                       }
                        for (current = 0; current <= page; current++) {
                            $('#nav-paging').append(
                                '<li class="' + ((current + 1) == paramOffset ? "active" : "") + '"><a href="#">' + (current + 1) + '</a></li>'
@@ -164,6 +171,13 @@
                            $('#nav-paging').append(
                                 '<li><a href="#">Next</a></li>'
                            );
+                       }
+                       else {
+                           if (paramOffset < (page + 1)) {
+                               $('#nav-paging').append(
+                                    '<li style="display:none"><a href="#">Next</a></li>'
+                               );
+                           }
                        }
                        $('#nav-paging li a').each(function (index, value) {
                            $(this).on('click', function () {
@@ -190,7 +204,7 @@
                $('.form-filter').append(
                     '<div class="col-xs-2 col-md-1">' +
                         '<div class="checkbox-wrapper">' +
-                            '<label><input type="checkbox" id="0"><span>All</span></label>' +
+                            '<label><input type="checkbox" id="0" onclick="searchByTag(this);"><span>All</span></label>' +
                         '</div>' +
                     '</div>' +
                     '<div id="interestList" class="col-xs-10 col-md-11">' +
@@ -199,7 +213,7 @@
                $.each(parsedTaskJSONObject, function () {
                    $('#interestList').append(
                             '<div class="checkbox-wrapper">' +
-                                '<label><input type="checkbox" id="' + this.CommonId + '"><span>' + this.TagName + '</span></label>' +
+                                '<label><input type="checkbox" id="' + this.CommonId + '" onclick="searchByTag(this);"><span>' + this.TagName + '</span></label>' +
                             '</div>'
                        );
                    counter++;
@@ -217,145 +231,187 @@
                    setRemoval();
                }
            });
-    }
+       }
 
-    function pagination(obj) {
-        var page = $(obj).html();
-        var current = $(obj).parent().parent().find('li.active a').html();
-        if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
-            var listParam = "";
-            $('section#filter-bar .tag-lists .item').each(function (index, value) {
-                listParam += $(this).attr('data-id') + ",";
-            });
-            listParam = listParam.substring(0, listParam.length - 1);
-            if (listParam == "") {
-                listParam = "0";
-            }
-            $('#list').val(listParam);
-            if (page == "Prev") {
-                page = parseInt(current) - 1;
-            }
-            else if (page == "Next") {
-                page = parseInt(current) + 1;
-            }
-            $('#search-page').val(page);
-            $('#grid').val('true');
-            theForm.submit();
-        }
-    }
+       function pagination(obj) {
+           var page = $(obj).html();
+           var current = $(obj).parent().parent().find('li.active a').html();
+           if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+               var listParam = "";
+               $('section#filter-bar .tag-lists .item').each(function (index, value) {
+                   listParam += $(this).attr('data-id') + ",";
+               });
+               listParam = listParam.substring(0, listParam.length - 1);
+               if (listParam == "") {
+                   listParam = "0";
+               }
+               $('#list').val(listParam);
+               if (page == "Prev") {
+                   page = parseInt(current) - 1;
+               }
+               else if (page == "Next") {
+                   page = parseInt(current) + 1;
+               }
+               $('#search-page').val(page);
+               $('#grid').val('true');
+               theForm.submit();
+           }
+       }
 
-    function search(e) {
-        var enterKey = 13;
-        if (e.which == enterKey) {
-            if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
-                var listParam = "";
-                $('section#filter-bar .tag-lists .item').each(function (index, value) {
-                    listParam += $(this).attr('data-id') + ",";
-                });
-                listParam = listParam.substring(0, listParam.length - 1);
-                if (listParam == "") {
-                    listParam = "0";
-                }
-                $('#list').val(listParam);
-                $('#search-page').val("1");
-                theForm.submit();
-            }
-        }
-    }
+       function search(e) {
+           var enterKey = 13;
+           if (e.which == enterKey) {
+               if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+                   var listParam = "";
+                   $('section#filter-bar .tag-lists .item').each(function (index, value) {
+                       listParam += $(this).attr('data-id') + ",";
+                   });
+                   listParam = listParam.substring(0, listParam.length - 1);
+                   if (listParam == "") {
+                       listParam = "0";
+                   }
+                   $('#list').val(listParam);
+                   $('#search-page').val("1");
+                   theForm.submit();
+               }
+           }
+       }
 
-    /* Tag removal */
-    function setRemoval() {
-        var tagList = $('section#filter-bar .tag-lists');
-        var tagListItem = $('section#filter-bar .tag-lists .item');
-        var tagListCount = tagListItem.length;
-        tagListItem.each(function (index, value) {
-            $(this).on('click', function () {
-                var dataId = $(this).attr('data-id');
-                $('section#filter-bar .filter-expanded input[type="checkbox"]').each(function (index, value) {
-                    if ($(this).attr('id') == dataId) {
-                        $(this).prop('checked', '');
-                    }
-                });
-                $(this).stop().fadeOut('fast');
-                $(this).remove();
-                return false;
-            });
-        });
-    }
+       function searchByTrigger() {
+           if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+               var listParam = "";
+               $('section#filter-bar .tag-lists .item').each(function (index, value) {
+                   listParam += $(this).attr('data-id') + ",";
+               });
+               listParam = listParam.substring(0, listParam.length - 1);
+               if (listParam == "") {
+                   listParam = "0";
+               }
+               $('#list').val(listParam);
+               $('#search-page').val("1");
+               theForm.submit();
+           }
+       }
 
-    function setList() {
-        var tagCount = $('section#filter-bar .filter-expanded input[type="checkbox"]').length;
-        $('section#filter-bar .filter-expanded input[type="checkbox"]').each(function (index, value) {
-            $(this).on('change', function () {
-                var dataId = $(this).attr('id');
-                var dataText = $(this).parent().find('span').html();
-                var itemCount = $('section#filter-bar .tag-lists > .item[data-id="0"]').length;
-                if (this.checked) {
-                    if (dataId == "0") {
-                        $('section#filter-bar .tag-lists .item').each(function (index, value) {
-                            $(this).stop().fadeOut('fast');
-                            $(this).remove();
-                        });
-                        $('section#filter-bar .filter-expanded input[type="checkbox"]').each(function (index, value) {
-                            if ($(this).attr('id') != "0") {
-                                $(this).prop('checked', '');
-                            }
-                        });
-                    }
-                    if (!itemCount > 0) {
-                        $('.tag-lists').html($('.tag-lists').html() + '<div class="item" data-id="' + dataId + '">' + dataText + '<a href="#" class="remove-tag">&times;</a></div>');
-                        setRemoval();
-                    }
-                    else {
-                        $('.tag-lists').html('<div class="item" data-id="' + dataId + '">' + dataText + '<a href="#" class="remove-tag">&times;</a></div>');
-                        setRemoval();
-                        $('section#filter-bar .filter-expanded input[type="checkbox"]').each(function (index, value) {
-                            if ($(this).attr('id') == "0") {
-                                $(this).prop('checked', '');
-                            }
-                        });
-                    }
-                }
-                else {
-                    $('section#filter-bar .tag-lists > .item[data-id="' + dataId + '"]').stop().fadeOut('fast');
-                    $('section#filter-bar .tag-lists > .item[data-id="' + dataId + '"]').remove();
-                }
-            });
-        });
-    }
+       function searchByTag(obj) {
+           if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+               var listParam = "";
+               $('section#filter-bar .tag-lists .item').each(function (index, value) {
+                   listParam += $(this).attr('data-id') + ",";
+               });
+               if (listParam.indexOf("0") > -1) {
+                   listParam = $(obj).attr('id');
+               }
+               else {
+                   listParam += $(obj).attr('id');
+               }
 
-    function setCheckbox() {
-        var tagList = $('section#filter-bar .tag-lists');
-        var tagListItem = $('section#filter-bar .tag-lists .item');
-        var tagListCount = tagListItem.length;
-        tagListItem.each(function (index, value) {
-            var dataId = $(this).attr('data-id');
-            $('section#filter-bar .filter-expanded input[type="checkbox"]').each(function (index, value) {
-                if ($(this).attr('id') == dataId) {
-                    $(this).prop('checked', 'checked');
-                }
-                else {
-                    $(this).prop('checked', '');
-                }
-            });
-        });
-    }
+               if ($(obj).attr('id') == "0") {
+                   listParam = $(obj).attr('id');
+               }
+               //listParam = listParam.substring(0, listParam.length - 1);
+               if (listParam == "") {
+                   listParam = "0";
+               }
+               $('#list').val(listParam);
+               $('#search-page').val("1");
+               theForm.submit();
+           }
+       }
 
-    function showMap() {
-        $('section#page .row').hide();
-        $('section#page .page-nav').show();
-        $('section#page .row .form-sort').hide();
-        $('#result').show();
-        $('section#map-bar').show();
-        google.maps.event.trigger(map, 'resize');
-    }
-    function showGrid() {
-        $('section#page .row').show();
-        $('section#page .row .form-sort').show();
-        $('section#map-bar').hide();
-    }
+       /* Tag removal */
+       function setRemoval() {
+           var tagList = $('section#filter-bar .tag-lists');
+           var tagListItem = $('section#filter-bar .tag-lists .item');
+           var tagListCount = tagListItem.length;
+           tagListItem.each(function (index, value) {
+               $(this).on('click', function () {
+                   var dataId = $(this).attr('data-id');
+                   $('section#filter-bar .filter-expanded input[type="checkbox"]').each(function (index, value) {
+                       if ($(this).attr('id') == dataId) {
+                           $(this).prop('checked', '');
+                       }
+                   });
+                   $(this).stop().fadeOut('fast');
+                   $(this).remove();
+                   return false;
+               });
+           });
+       }
+
+       function setList() {
+           var tagCount = $('section#filter-bar .filter-expanded input[type="checkbox"]').length;
+           $('section#filter-bar .filter-expanded input[type="checkbox"]').each(function (index, value) {
+               $(this).on('change', function () {
+                   var dataId = $(this).attr('id');
+                   var dataText = $(this).parent().find('span').html();
+                   var itemCount = $('section#filter-bar .tag-lists > .item[data-id="0"]').length;
+                   if (this.checked) {
+                       if (dataId == "0") {
+                           $('section#filter-bar .tag-lists .item').each(function (index, value) {
+                               $(this).stop().fadeOut('fast');
+                               $(this).remove();
+                           });
+                           $('section#filter-bar .filter-expanded input[type="checkbox"]').each(function (index, value) {
+                               if ($(this).attr('id') != "0") {
+                                   $(this).prop('checked', '');
+                               }
+                           });
+                       }
+                       if (!itemCount > 0) {
+                           $('.tag-lists').html($('.tag-lists').html() + '<div class="item" data-id="' + dataId + '">' + dataText + '<a href="#" class="remove-tag">&times;</a></div>');
+                           setRemoval();
+                       }
+                       else {
+                           $('.tag-lists').html('<div class="item" data-id="' + dataId + '">' + dataText + '<a href="#" class="remove-tag">&times;</a></div>');
+                           setRemoval();
+                           $('section#filter-bar .filter-expanded input[type="checkbox"]').each(function (index, value) {
+                               if ($(this).attr('id') == "0") {
+                                   $(this).prop('checked', '');
+                               }
+                           });
+                       }
+                   }
+                   else {
+                       $('section#filter-bar .tag-lists > .item[data-id="' + dataId + '"]').stop().fadeOut('fast');
+                       $('section#filter-bar .tag-lists > .item[data-id="' + dataId + '"]').remove();
+                   }
+               });
+           });
+       }
+
+       function setCheckbox() {
+           var tagList = $('section#filter-bar .tag-lists');
+           var tagListItem = $('section#filter-bar .tag-lists .item');
+           var tagListCount = tagListItem.length;
+           tagListItem.each(function (index, value) {
+               var dataId = $(this).attr('data-id');
+               $('section#filter-bar .filter-expanded input[type="checkbox"]').each(function (index, value) {
+                   if ($(this).attr('id') == dataId) {
+                       $(this).prop('checked', 'checked');
+                   }
+                   else {
+                       $(this).prop('checked', '');
+                   }
+               });
+           });
+       }
+
+       function showMap() {
+           $('section#page .row').hide();
+           $('section#page .page-nav').show();
+           $('section#page .row .form-sort').hide();
+           $('#result').show();
+           $('section#map-bar').show();
+           google.maps.event.trigger(map, 'resize');
+       }
+       function showGrid() {
+           $('section#page .row').show();
+           $('section#page .row .form-sort').show();
+           $('section#map-bar').hide();
+       }
 </script>
-<section id="search-bar">
+  <section id="search-bar" style="margin-top:50px;">
     <div class="container">
         <div class="row">
             <div class="col-xs-12 col-md-9">
@@ -375,7 +431,7 @@
     <div class="container">
         <a href="#" class="filter-expand"><i class="fa fa-caret-down"></i></a>
         <div class="row">
-            <div class="col-xs-12">
+            <div id="filter" class="col-xs-12">
                 <h3 class="title" style="color:white">Filter by interests:</h3>
                 <div class="tag-lists">
                 </div><!--/ .tags -->
@@ -390,12 +446,12 @@
     </div><!--/ .container -->
 </section>
 <section id="page" class="">
-    <div class="container">
+  <div class="container">
     </div><!--/ .container -->
     <section id="map-bar" style="display:none">
-        <div id="map_canvas" style="width: 100%; height: 100%; position: absolute; float:left"></div>
+      <div id="map_canvas" style="width: 100%; min-height:511px; position: absolute; float:left;z-index:1;min-height:"></div>
     </section>
 </section>
- <script src="http://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places"></script>
+<script src="http://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places"></script>
 <script src="<%= Request.Url.GetLeftPart(UriPartial.Authority)%>/Portals/_default/Skins/HammerFlex/js/jquery.geocomplete.min.js">
 </script>

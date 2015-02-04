@@ -13,6 +13,7 @@
 using System;
 using DotNetNuke.Entities.Modules;
 using DotNetNuke.Services.Exceptions;
+using Sentosa.Modules.HappeningModule.Models;
 
 namespace Sentosa.Modules.HappeningModule
 {
@@ -51,18 +52,54 @@ namespace Sentosa.Modules.HappeningModule
             {
                 if (Page.IsPostBack == false)
                 {
+                    var modules = new ModuleController();
                     //Check for existing settings and use those on this page
                     //Settings["SettingName"]
 
-                    /* uncomment to load saved settings in the text boxes
-                    if(Settings.Contains("Setting1"))
-                        txtSetting1.Text = Settings["Setting1"].ToString();
-			
-                    if (Settings.Contains("Setting2"))
-                        txtSetting2.Text = Settings["Setting2"].ToString();
+                    // uncomment to load saved settings in the text boxes
 
-                    */
+                    if(Settings.Contains("HappeningTitle"))
+                        TextTitle.Text = Settings["HappeningTitle"].ToString();
 
+                    if (Settings.Contains("HappeningDesc"))
+                        TextDescription.Text = Settings["HappeningDesc"].ToString();
+
+                    
+                    var contentEvent = new HappeningController().GetContentHappeningEvent();
+                    var contentPromotion = new HappeningController().GetContentHappeningPromotion();
+                    var contentHappening = new HappeningController().GetHappening(TabId);
+
+                    if (contentEvent.Count > 0)
+                    {
+                        Event.DataSource = contentEvent;
+                        Event.DataTextField = "TabName";
+                        Event.DataValueField = "TabID";
+                        Event.DataBind();
+                    }
+
+                    if (contentPromotion.Count > 0)
+                    {
+                        Promotion.DataSource = contentPromotion;
+                        Promotion.DataTextField = "TabName";
+                        Promotion.DataValueField = "TabID";
+                        Promotion.DataBind();
+                    }
+
+                    if (contentHappening.Count > 0)
+                    {
+                        foreach (var item in contentHappening)
+                        {
+                            if (item.TypeIdRef.Equals("P_EVENT"))
+                            {
+                                Event.Items.FindByValue(item.IdRef.ToString()).Selected = true;
+                            }
+                            else if (item.TypeIdRef.Equals("P_PROMO"))
+                            {
+                                Promotion.Items.FindByValue(item.IdRef.ToString()).Selected = true;
+                            }
+                        }
+                    }
+                    
                 }
             }
             catch (Exception exc) //Module failed to load
@@ -91,46 +128,59 @@ namespace Sentosa.Modules.HappeningModule
                 //modules.UpdateTabModuleSetting(TabModuleId, "Setting1",  txtSetting1.Text);
                 //modules.UpdateTabModuleSetting(TabModuleId, "Setting2",  txtSetting2.Text);
 
-                var Happening = new Models.Happening();
-                var Place = new Models.Place();
-                var HappeningController = new Models.HappeningController();
-                //Clear Happening List
-                HappeningController.DeleteHappening(TabId);
-                Place = HappeningController.GetPlace(TabId);
-
-                //Add Event to Happening
-                int totalEvent = Int32.Parse(Request.Params["listEvent"]);
-                for (int index = 1; index <= totalEvent; index++)
+                if (!String.IsNullOrEmpty(TextTitle.Text))
                 {
-                    if(Request.Form["event" + index] != "")
+                    modules.UpdateModuleSetting(ModuleId, "HappeningTitle", TextTitle.Text);
+                }
+                else
+                {
+                    modules.UpdateModuleSetting(ModuleId, "HappeningTitle", "Something special happening in the State");
+                }
+
+                if (!String.IsNullOrEmpty(TextDescription.Text))
+                {
+                    modules.UpdateModuleSetting(ModuleId, "HappeningDesc", TextDescription.Text);
+                }
+                else
+                {
+                    modules.UpdateModuleSetting(ModuleId, "HappeningDesc", "Fun is all around in this State. Find out what is happening around Sentosa.");
+                }
+
+                var Place = new Place();
+                var happeningController = new HappeningController();
+                happeningController.DeleteHappening(TabId);
+                Place = happeningController.GetPlace(TabId);
+                for (int index = 0; index < Event.Items.Count; index++)
+                {
+                    if (Event.Items[index].Selected)
                     {
-                        Happening.IdRef = Int32.Parse(Request.Form["event" + index]);
-                        Happening.TypeIdRef = "P_EVENT";
-                        Happening.IsStatic = false;
+                        var eventHappening = new Happening();
+                        eventHappening.IdRef = int.Parse(Event.Items[index].Value);
+                        eventHappening.TypeIdRef = "P_EVENT";
+                        eventHappening.IsStatic = false;
                         if (Place.TabName.ToLower().Equals("home"))
                         {
-                            Happening.IsStatic = true;
+                            eventHappening.IsStatic = true;
                         }
-                        Happening.IdStaticRef = TabId;
-                        HappeningController.AddHappening(Happening);
+                        eventHappening.IdStaticRef = TabId;
+                        happeningController.AddHappening(eventHappening);
                     }
                 }
 
-                //Add Promotion to Happening
-                int totalPromotion = Int32.Parse(Request.Params["listPromotion"]);
-                for (int index = 1; index <= totalPromotion; index++)
+                for (int index = 0; index < Promotion.Items.Count; index++)
                 {
-                    if (Request.Form["promotion" + index] != "")
+                    if (Promotion.Items[index].Selected)
                     {
-                        Happening.IdRef = Int32.Parse(Request.Form["promotion" + index]);
-                        Happening.TypeIdRef = "P_PROMO";
-                        Happening.IsStatic = false;
+                        var promotionHappening = new Happening();
+                        promotionHappening.IdRef = int.Parse(Promotion.Items[index].Value);
+                        promotionHappening.TypeIdRef = "P_PROMO";
+                        promotionHappening.IsStatic = false;
                         if (Place.TabName.ToLower().Equals("home"))
                         {
-                            Happening.IsStatic = true;
+                            promotionHappening.IsStatic = true;
                         }
-                        Happening.IdStaticRef = TabId;
-                        HappeningController.AddHappening(Happening);
+                        promotionHappening.IdStaticRef = TabId;
+                        happeningController.AddHappening(promotionHappening);
                     }
                 }
             }

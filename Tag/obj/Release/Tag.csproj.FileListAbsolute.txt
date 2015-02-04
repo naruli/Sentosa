@@ -1,0 +1,4 @@
+C:\Website\dnndev.me\bin\Tag.dll
+C:\Website\dnndev.me\bin\Tag.pdb
+C:\Website\dnndev.me\DesktopModules\Tag\obj\Release\Tag.dll
+C:\Website\dnndev.me\DesktopModules\Tag\obj\Release\Tag.pdb

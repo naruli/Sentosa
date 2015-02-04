@@ -40,6 +40,7 @@ namespace Sentosa.Modules.Place
         {
             try
             {
+                var showMap = (Request.QueryString["showMap"] != null ? Request.QueryString["showMap"].ToString() : "no");
                 var currentUrl = Globals.NavigateURL(
                                 this.TabId,
                                 this.Request.QueryString["ctl"],
@@ -99,9 +100,10 @@ namespace Sentosa.Modules.Place
                     imagename = "icon-hotels.png";
                 }
                 //Response.Write("<script>alert('" + groupname + "');</script>");
-                var places = new Models.PlaceController().GetPlace(groupname, -4, 16, searchValue, sortBy);
+                var places = new Models.PlaceController().GetPlace(groupname, -4, 16, searchValue, sortBy, list);
                 mapScript += "var map = new google.maps.Map(document.getElementById('map_canvas'), {" +
-                                 "\n\tzoom: 17," +
+                                 "\n\tzoom: 16," +
+                                 "\n\tdisableDefaultUI: true," +
                                  "\n\tscrollwheel: false," +
                                  "\n\tcenter: new google.maps.LatLng(1.249404,103.830321)," +
                                  "\n\tmapTypeId: google.maps.MapTypeId.ROADMAP" +
@@ -152,41 +154,52 @@ namespace Sentosa.Modules.Place
                                           "\n\ticon: image" +
                                       "\n});";
 
-                        mapScript += "\n\n";
+                            mapScript += "\n\n";
 
-                        mapScript += "var shortDesc = krDencodeEntities('" + item.ShortDescription + "');" +
-                                        "\nvar contentString_" + item.CommonId + " = " +
-                                          "\n\t'<div id=\"content\" style=\"min-height:420px;min-width:270px;max-height:420px;max-width:270px\">'+" +
-                                          "\n\t'<div class=\"box-item\" style=\"min-height:420px;min-width:263px;max-width:263px\">' +" +
-                                                     "\n\t\t'<a href=\"" + item.Url + "\">' +" +
-                                                        "\n\t\t'<img src=\"" + item.Photo + "\" alt=\"\" title=\"\" class=\"\">'+" +
-                                                         "\n\t\t'<div class=\"box-content\">' +" +
-                                                             "\n\t\t\t'<h3>" + item.TabName + "</h3>' +" +
-                                                             "\n\t\t\t'<p>' + shortDesc.trunc(150, true) + '</p>' +" +
-                                                         "\n\t\t'</div>' +" +
-                                                      "\n\t'</a>' +" +
-                                                         "\n\t'<div class=\"box-nav\"><a href=\"" + item.Url + "\">' +" +
-                                                             "\n\t\t'</a><a href=\"#\"><img src=\"" + (Request.ApplicationPath.Equals("/") ? "" : Request.ApplicationPath) + "/portals/_default/skins/hammerflex/img/icon-map.png\" alt=\"\" title=\"\" class=\"\"></a>' +" +
-                                                             (item.SourceUrl != "" ? "\n\t\t'<a href=\"http://" + item.SourceUrl + "\" target=\"_blank\"><img src=\"" + (Request.ApplicationPath.Equals("/") ? "" : Request.ApplicationPath) + "/portals/_default/skins/hammerflex/img/icon-tag.png\" alt=\"\" title=\"\" class=\"\"></a>' +" : "") +
-                                                             "\n\t\t'<a href=\"" + item.Url + "\">Find out more <i class=\"fa fa-angle-right\"></i></a>' +" +
-                                                         "\n\t'</div>' +" +
-                                                 "\n'</div>' +" +
-                                          "\n'</div>';";
+                            mapScript += "var shortDesc = krDencodeEntities('" + item.ShortDescription + "');" +
+                                            "\nvar contentString_" + item.CommonId + " = " +
+                                              "\n\t'<div id=\"content\" style=\"min-height:420px;min-width:270px;max-height:420px;max-width:270px\">'+" +
+                                              "\n\t'<div class=\"box-item\" style=\"min-height:420px;min-width:263px;max-width:263px\">' +" +
+                                                         "\n\t\t'<a href=\"" + item.Url + "\">' +" +
+                                                            "\n\t\t'<img src=\"" + item.Photo + "\" alt=\"\" title=\"\" class=\"\" style=\"min-height:159px;min-width:261px;max-height:159px;max-width:261px;\">'+" +
+                                                             "\n\t\t'<div class=\"box-content\">' +" +
+                                                                 "\n\t\t\t'<h3>" + item.TabName + "</h3>' +" +
+                                                                 "\n\t\t\t'<p>' + shortDesc.trunc(150, true) + '</p>' +" +
+                                                             "\n\t\t'</div>' +" +
+                                                          "\n\t'</a>' +" +
+                                                             "\n\t'<div class=\"box-nav\"><a href=\"" + item.Url + "\">' +" +
+                                                                 "\n\t\t'</a><a href=\"#\"><img src=\"" + (Request.ApplicationPath.Equals("/") ? "" : Request.ApplicationPath) + "/portals/_default/skins/hammerflex/img/icon-map.png\" alt=\"\" title=\"\" class=\"\"></a>' +" +
+                                                                 (item.SourceUrl != "" ? "\n\t\t'<a href=\"http://" + item.SourceUrl + "\" target=\"_blank\"><img src=\"" + (Request.ApplicationPath.Equals("/") ? "" : Request.ApplicationPath) + "/portals/_default/skins/hammerflex/img/icon-tag.png\" alt=\"\" title=\"\" class=\"\"></a>' +" : "") +
+                                                                 "\n\t\t'<a href=\"" + item.Url + "\">Find out more <i class=\"fa fa-angle-right\"></i></a>' +" +
+                                                             "\n\t'</div>' +" +
+                                                     "\n'</div>' +" +
+                                              "\n'</div>';";
 
-                        mapScript += "\n\n";
+                            mapScript += "\n\n";
 
-                        mapScript += "var infowindow_" + item.CommonId + " = new google.maps.InfoWindow({" +
-                                          "\n\tcontent: contentString_" + item.CommonId + "," +
-                                          "\n\tmaxWidth: 500" +
-                                        "\n});";
+                            mapScript += "var infowindow_" + item.CommonId + " = new google.maps.InfoWindow({" +
+                                              "\n\tcontent: contentString_" + item.CommonId + "," +
+                                              "\n\tmaxWidth: 500" +
+                                            "\n});";
 
-                        mapScript += "\n\n";
+                            mapScript += "\n\n";
 
-                        mapScript += "google.maps.event.addListener(beachMarker_" + item.CommonId + ", 'click', function() {" +
-                                        "\n\tinfowindow_" + item.CommonId + ".open(map,beachMarker_" + item.CommonId + ");" +
-                                      "\n});";
+                            mapScript += "google.maps.event.addListener(beachMarker_" + item.CommonId + ", 'click', function() {" +
+                                            "\n\tinfowindow_" + item.CommonId + ".open(map,beachMarker_" + item.CommonId + ");" +
+                                          "\n});";
 
-                        mapScript += "\n\n";
+                            mapScript += "\n\n";
+
+                            if (!showMap.Equals("no"))
+                            {
+                                mapScript += "showMap();";
+                                mapScript += "\n\n";
+                            }
+                            else
+                            {
+                                mapScript += "showGrid();";
+                                mapScript += "\n\n";
+                            }
                         }
                     }
                 }

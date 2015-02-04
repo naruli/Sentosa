@@ -169,7 +169,7 @@ namespace Sentosa.Modules.ContentStaging.Models
 
     public class Zone
     {
-        public int ZoneId { get; set; }
+        public int Id { get; set; }
         public string ZoneName { get; set; }
     }
 
@@ -178,7 +178,7 @@ namespace Sentosa.Modules.ContentStaging.Models
         public int Id { get; set; }
         public int CommonId { get; set; }
         public string Url { get; set; }
-
+        public int OrderCarousel { get; set; }
     }
 
     public class Gallery
@@ -187,5 +187,31 @@ namespace Sentosa.Modules.ContentStaging.Models
         public int CommonId { get; set; }
         public string Url { get; set; }
         public int Type { get; set; } //0 is photo , 1 is video
+        public int OrderGallery { get; set; }
+    }
+
+    public class Tag
+    {
+        public int Id { get; set; }
+        public int CommonId { get; set; }
+        public int LanguageId { get; set; }
+        public int TypeId { get; set; }
+        public string Tagname { get; set; }
+    }
+
+    public class TagPlace
+    {
+        public int Id { get; set; }
+        public int TabId { get; set; }
+        public int TagId { get; set; }
+    }
+
+    public class SubPagePlace
+    {
+        public int Id { get; set; }
+        public int TabId { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public int OrderSubPage { get; set; }
     }
 }

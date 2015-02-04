@@ -15,11 +15,11 @@ namespace Sentosa.Modules.Place.Models
     {
         [AllowAnonymous]
         [HttpGet]
-        public HttpResponseMessage GetPlace(string groupname, int offset, int limit, string searchValue, string sortBy)
+        public HttpResponseMessage GetPlace(string groupname, int offset, int limit, string searchValue, string sortBy, string list)
         {
             try
             {
-                var place = new PlaceController().GetPlace(groupname, offset, limit, searchValue, sortBy).ToJson();
+                var place = new PlaceController().GetPlace(groupname, offset, limit, searchValue, sortBy, list).ToJson();
                 return Request.CreateResponse(HttpStatusCode.OK, place);
             }
             catch (Exception exc)

@@ -495,5 +495,20 @@ namespace Sentosa.Modules.ContentStaging.Models
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc);
             }
         }
+
+        [AllowAnonymous]
+        [HttpGet]
+        public HttpResponseMessage GetSubPagePlace(int Id)
+        {
+            try
+            {
+                var subPagePlace = new ContentStagingController().GetSubPagePlace(Id).ToJson();
+                return Request.CreateResponse(HttpStatusCode.OK, subPagePlace);
+            }
+            catch (Exception exc)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc);
+            }
+        }
     }
 }

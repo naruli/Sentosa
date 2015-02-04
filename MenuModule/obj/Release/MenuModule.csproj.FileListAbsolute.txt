@@ -1,0 +1,4 @@
+C:\Website\dnndev.me\bin\MenuModule.dll
+C:\Website\dnndev.me\bin\MenuModule.pdb
+C:\Website\dnndev.me\DesktopModules\MenuModule\obj\Release\MenuModule.dll
+C:\Website\dnndev.me\DesktopModules\MenuModule\obj\Release\MenuModule.pdb

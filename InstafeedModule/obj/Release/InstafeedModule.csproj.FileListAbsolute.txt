@@ -1,0 +1,4 @@
+C:\Website\dnndev.me\bin\InstafeedModule.dll
+C:\Website\dnndev.me\bin\InstafeedModule.pdb
+C:\Website\dnndev.me\DesktopModules\InstafeedModule\obj\Release\InstafeedModule.dll
+C:\Website\dnndev.me\DesktopModules\InstafeedModule\obj\Release\InstafeedModule.pdb

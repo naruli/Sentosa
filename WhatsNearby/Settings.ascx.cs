@@ -62,7 +62,12 @@ namespace Sentosa.Modules.WhatsNearby
                         txtSetting2.Text = Settings["Setting2"].ToString();
 
                     */
+                    //Basic Setting
+                    if (Settings.Contains("WhatsNearbyTitle"))
+                        TextTitle.Text = Settings["WhatsNearbyTitle"].ToString();
 
+                    if (Settings.Contains("WhatsNearbyDesc"))
+                        TextDescription.Text = Settings["WhatsNearbyDesc"].ToString();
                 }
             }
             catch (Exception exc) //Module failed to load
@@ -90,6 +95,25 @@ namespace Sentosa.Modules.WhatsNearby
                 //tab module settings
                 //modules.UpdateTabModuleSetting(TabModuleId, "Setting1",  txtSetting1.Text);
                 //modules.UpdateTabModuleSetting(TabModuleId, "Setting2",  txtSetting2.Text);
+
+                //Save Basic Setting
+                if (!String.IsNullOrEmpty(TextTitle.Text))
+                {
+                    modules.UpdateModuleSetting(ModuleId, "WhatsNearbyTitle", TextTitle.Text);
+                }
+                else
+                {
+                    modules.UpdateModuleSetting(ModuleId, "WhatsNearbyTitle", "What's Nearby");
+                }
+
+                if (!String.IsNullOrEmpty(TextDescription.Text))
+                {
+                    modules.UpdateModuleSetting(ModuleId, "WhatsNearbyDesc", TextDescription.Text);
+                }
+                else
+                {
+                    modules.UpdateModuleSetting(ModuleId, "WhatsNearbyDesc", "Fun is all around in this State. Find out what is happening around Sentosa.");
+                }
             }
             catch (Exception exc) //Module failed to load
             {

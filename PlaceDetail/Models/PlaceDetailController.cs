@@ -14,6 +14,15 @@ namespace Sentosa.Modules.PlaceDetail.Models
         {
             IList<Place> place = new List<Place>();
             place.Add(CBO.FillCollection<Place>(DataProvider.Instance().ExecuteReader("GetPlace")).Where(x => x.TabID == _TabId).FirstOrDefault());
+
+            int ParenId = (int) place.Select(x => x.ParentId).ToList()[0];
+            IList<Place> placeParent = new List<Place>();
+            placeParent.Add(CBO.FillCollection<Place>(DataProvider.Instance().ExecuteReader("GetPlace")).Where(x => x.TabID == ParenId).FirstOrDefault());
+
+            string ParentUrl = DotNetNuke.Common.Globals.NavigateURL(placeParent.Select(x => x.TabID).ToList()[0]);
+
+            place[0].UrlParentId = ParentUrl;
+
             return place;
         }
 
@@ -66,6 +75,11 @@ namespace Sentosa.Modules.PlaceDetail.Models
             }
 
             return listSubPage;
+        }
+
+        public IList<SubPagePlace> GetSubPagePlace(int _TabId)
+        {
+            return CBO.FillCollection<SubPagePlace>(DataProvider.Instance().ExecuteReader("GetSubPage")).Where(x => x.TabId == _TabId).ToList();
         }
     }
 }

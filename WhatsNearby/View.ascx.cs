@@ -38,7 +38,24 @@ namespace Sentosa.Modules.WhatsNearby
         {
             try
             {
+                var modules = new ModuleController();
+                if (!Settings.Contains("WhatsNearbyTitle"))
+                {
+                    modules.UpdateModuleSetting(ModuleId, "WhatsNearbyTitle", "What's Nearby");
+                    Header.InnerText = "What's Nearby";
+                }
 
+                if (Settings.Contains("WhatsNearbyTitle"))
+                    Header.InnerText = Settings["WhatsNearbyTitle"].ToString();
+
+                if (!Settings.Contains("WhatsNearbyDesc"))
+                {
+                    modules.UpdateModuleSetting(ModuleId, "WhatsNearbyDesc", "Fun is all around in this State. Find out what is happening around Sentosa.");
+                    Description.InnerText = "Fun is all around in this State. Find out what is happening around Sentosa.";
+                }
+
+                if (Settings.Contains("WhatsNearbyDesc"))
+                    Description.InnerText = Settings["WhatsNearbyDesc"].ToString();
             }
             catch (Exception exc) //Module failed to load
             {

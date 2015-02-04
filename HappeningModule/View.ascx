@@ -86,8 +86,8 @@
             
             <div class="col-xs-12">
             
-                <h2 class="title">Something special happening in the State</h2>
-                <p class="desc">Fun is all around in this State. Find out what is happening around Sentosa.</p>
+                <h2 class="title" id="Header" runat="server"></h2>
+                <p class="desc" id="Description" runat="server"></p>
 
                 <div id="happeningCarousel" class="carousel slide" data-ride="carousel">
                     

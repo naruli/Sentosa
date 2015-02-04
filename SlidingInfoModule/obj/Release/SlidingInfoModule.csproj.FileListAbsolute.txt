@@ -1,0 +1,4 @@
+C:\Website\dnndev.me\bin\SlidingInfoModule.dll
+C:\Website\dnndev.me\bin\SlidingInfoModule.pdb
+C:\Website\dnndev.me\DesktopModules\SlidingInfoModule\obj\Release\SlidingInfoModule.dll
+C:\Website\dnndev.me\DesktopModules\SlidingInfoModule\obj\Release\SlidingInfoModule.pdb

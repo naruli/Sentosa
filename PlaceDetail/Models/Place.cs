@@ -92,6 +92,7 @@ namespace Sentosa.Modules.PlaceDetail.Models
         public Nullable<int> FiuzuSync { get; set; }
         public Nullable<int> XmobSync { get; set; }
 
+        public string UrlParentId { get; set; }
     }
 
     public class Gallery
@@ -111,6 +112,14 @@ namespace Sentosa.Modules.PlaceDetail.Models
         public string NatureGuidedTours { get; set; } //nature guided {sub menu : Visitor Information}
         public string Price { get; set; } //pricing of attraction {sub menu : Visitor Information}
         public string AdmissionInfo { get; set; } //ticket (attraction,event) 
+    }
+
+    public class SubPagePlace
+    {
+        public int Id { get; set; }
+        public int TabId { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
     }
 
  
