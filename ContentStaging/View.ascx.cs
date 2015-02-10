@@ -105,6 +105,8 @@ namespace Sentosa.Modules.ContentStaging
                 //Load Menu by Parent
                 menuScript += "$('#panels-demo').show();";
 
+                ClearCarousel();
+
                 menuScript = LoadCarousel(ParentId, menuScript);
                 
                 Page.ClientScript.RegisterStartupScript(this.GetType(), "showMenuModule", menuScript, true);
@@ -129,6 +131,8 @@ namespace Sentosa.Modules.ContentStaging
                     menuScript += "\n$('#SubPageMenu').show();";
                 }
 
+                ClearCarousel();
+
                 menuScript = LoadCarousel(childId, menuScript);
 
                 menuScript = LoadGallery(childId, menuScript);
@@ -144,6 +148,31 @@ namespace Sentosa.Modules.ContentStaging
                 LoadContent(childId);
             }
             Page.ClientScript.RegisterStartupScript(this.GetType(), "showMenuTab", menuScript, true);
+        }
+
+        protected void ClearCarousel()
+        {
+            //Label66.Visible = false;
+            //CarouselCaption.Visible = false;
+            CarouselCaption.Text = "";
+            //Label67.Visible = false;
+            //CarouselDescription.Visible = false;
+            CarouselDescription.Text = "";
+            //Label68.Visible = false;
+            //CarouselButton.Visible = false;
+            CarouselButton.Text = "";
+            //Label69.Visible = false;
+            //CarouselLink.Visible = false;
+            CarouselLink.Text = "";
+            //Label70.Visible = false;
+            //CarouselPosition.Visible = false;
+            CarouselPosition.Items[0].Selected = true;
+            //Label71.Visible = false;
+            //CarouselColor.Visible = false;
+            CarouselColor.Items[0].Selected = true;
+
+            CarouselEdit.Visible = false;
+            CarouselDelete.Visible = false;
         }
 
         protected void ContentSave_Click(object sender, EventArgs e)
@@ -564,16 +593,27 @@ namespace Sentosa.Modules.ContentStaging
         {
             //Load Carousel Data
             var carousel = new ContentStagingController().GetCarousel(tabId);
+            IList<CarouselPhoto> child = new List<CarouselPhoto>();
+            CarouselPhoto defaultSelect = new CarouselPhoto();
+            defaultSelect.Id = 0;
+            defaultSelect.Caption = "-- Select Carousel --";
+
+            child.Add(defaultSelect);
+
             if (carousel.Count > 0)
             {
                 var counter = 0;
                 foreach (var item in carousel)
                 {
                     counter++;
+                    if (String.IsNullOrEmpty(item.Caption))
+                        item.Caption = "No Caption";
+                    child.Add(item);
                     menuScript += "\n$('#CarouselTable tbody').append(" +
                                 "\n\t'<tr>' +" +
                                 "\n\t\t'<td><img src=\"" + item.Url + "\" class=\"\" style=\"max-width: 270px;max-height: 100px;min-width:270px;min-height:100px\"></td>' +" +
-                                "\n\t\t'<td><input type=\"hidden\" name=\"idCarousel" + counter + "\" value=\"" + item.Id + "\"/><input type=\"text\" name=\"orderCarousel" + counter + "\" value=\"" + item.OrderCarousel + "\" /><input type=\"button\" name=\"deleteBtn\" id=\"" + item.Id + "\" onclick=\"removeCheckbox(this);\" value=\"Delete\" /></td>' +" +
+                                "\n\t\t'<td>" + (item.Caption != "" ? item.Caption : "No Caption") + "</td>' +" +
+                                "\n\t\t'<td><input type=\"hidden\" name=\"idCarousel" + counter + "\" value=\"" + item.Id + "\"/><input type=\"text\" name=\"orderCarousel" + counter + "\" value=\"" + (item.OrderCarousel == 0 ? counter : item.OrderCarousel) + "\" style=\"text-align:center;\" /></td>' +" +
                                 "\n\t'</tr>'" +
                               "\n);";
                 }
@@ -582,10 +622,15 @@ namespace Sentosa.Modules.ContentStaging
             else
             {
                 menuScript += "\n$('#CarouselTable tbody').append(" +
-                                "\n\t'<tr><td colspan=\"2\">No Data Found.</td></tr>'" +
+                                "\n\t'<tr><td colspan=\"3\">No Data Found.</td></tr>'" +
                               "\n);";
                 CarouselOrderSave.Visible = false;
+                CarouselList.Enabled = false;
             }
+            CarouselList.DataSource = child;
+            CarouselList.DataTextField = "Caption";
+            CarouselList.DataValueField = "Id";
+            CarouselList.DataBind();
 
             return menuScript;
         }
@@ -911,7 +956,41 @@ namespace Sentosa.Modules.ContentStaging
             {
                 carouselModule.Url = Request.Url.GetLeftPart(UriPartial.Authority) + FileManager.Instance.GetUrl(image);
                 carouselModule.CommonId = tabId;
+                carouselModule.Caption = CarouselCaption.Text;
+                carouselModule.Description = CarouselDescription.Text;
+                carouselModule.Button = CarouselButton.Text;
+                carouselModule.Link = CarouselLink.Text;
+                carouselModule.Position = (CarouselPosition.SelectedValue.Equals("0") ? false : true);
+                carouselModule.Color = int.Parse(CarouselColor.SelectedValue);
+                carouselModule.Photo = String.Format("FileID={0}", CarouselImage.FileID);
                 carouselController.AddCarousel(carouselModule);
+
+                Response.Write("<script>alert('Successfully Added!');</script>");
+            }
+            else
+            {
+                Response.Write("<script>alert('Please Select Image!');</script>");
+            }
+        }
+
+        protected void EditCarousel(int tabId, int Id)
+        {
+            var carouselModule = new CarouselPhoto();
+            var carouselController = new ContentStagingController();
+
+            var image = (FileInfo)FileManager.Instance.GetFile(CarouselImage.FileID);
+            if (image != null)
+            {
+                carouselModule.Url = Request.Url.GetLeftPart(UriPartial.Authority) + FileManager.Instance.GetUrl(image);
+                carouselModule.Id = Id;
+                carouselModule.Caption = CarouselCaption.Text;
+                carouselModule.Description = CarouselDescription.Text;
+                carouselModule.Button = CarouselButton.Text;
+                carouselModule.Link = CarouselLink.Text;
+                carouselModule.Position = (CarouselPosition.SelectedValue.Equals("0") ? false : true);
+                carouselModule.Color = int.Parse(CarouselColor.SelectedValue);
+                carouselModule.Photo = String.Format("FileID={0}", CarouselImage.FileID);
+                carouselController.UpdateCarousel(carouselModule);
 
                 Response.Write("<script>alert('Successfully Updated!');</script>");
             }
@@ -919,6 +998,18 @@ namespace Sentosa.Modules.ContentStaging
             {
                 Response.Write("<script>alert('Please Select Image!');</script>");
             }
+        }
+
+        protected void DeleteCarousel(int tabId, string Id)
+        {
+            var carouselModule = new CarouselPhoto();
+            var carouselController = new ContentStagingController();
+
+            carouselModule.Id = int.Parse(Id);
+
+            carouselController.DeleteCarousel(carouselModule);
+
+            Response.Write("<script>alert('Successfully Deleted!');</script>");
         }
 
         protected void AddGallery(int tabId)
@@ -1055,7 +1146,7 @@ namespace Sentosa.Modules.ContentStaging
                         carousel.Id = int.Parse(Request.Form["idCarousel" + index]);
                         carousel.OrderCarousel = int.Parse(Request.Form["orderCarousel" + index]);
 
-                        carouselController.UpdateCarousel(carousel);
+                        carouselController.UpdateOrderCarousel(carousel);
                     }
 
                     Response.Write("<script>alert('Successfully Updated!');</script>");
@@ -1076,7 +1167,7 @@ namespace Sentosa.Modules.ContentStaging
                         carousel.Id = int.Parse(Request.Form["idCarousel" + index]);
                         carousel.OrderCarousel = int.Parse(Request.Form["orderCarousel" + index]);
 
-                        carouselController.UpdateCarousel(carousel);
+                        carouselController.UpdateOrderCarousel(carousel);
                     }
 
                     Response.Write("<script>alert('Successfully Updated!');</script>");
@@ -1106,6 +1197,97 @@ namespace Sentosa.Modules.ContentStaging
             }
 
             Child_SelectedIndexChanged(sender, e);
+        }
+
+        protected void CarouselEdit_Click(object sender, EventArgs e)
+        {
+            int ParentId = Int32.Parse(ContentModule.SelectedValue);
+            int childId = Int32.Parse(ContentTab.SelectedValue);
+            int Id = Int32.Parse(CarouselId.Value);
+            if (ParentId > 0 && childId > 0)
+            {
+                EditCarousel(childId, Id);
+
+                Child_SelectedIndexChanged(sender, e);
+            }
+            else
+            {
+                EditCarousel(ParentId, Id);
+
+                Parent_SelectedIndexChanged(sender, e);
+            }
+            CarouselList_SelectedIndexChanged(sender, e);
+        }
+
+        protected void CarouselDelete_Click(object sender, EventArgs e)
+        {
+            int ParentId = Int32.Parse(ContentModule.SelectedValue);
+            int childId = Int32.Parse(ContentTab.SelectedValue);
+            if (ParentId > 0 && childId > 0)
+            {
+                DeleteCarousel(childId, CarouselId.Value);
+
+                Child_SelectedIndexChanged(sender, e);
+            }
+            else
+            {
+                DeleteCarousel(ParentId, CarouselId.Value);
+
+                Parent_SelectedIndexChanged(sender, e);
+            }
+        }
+
+        protected void CarouselList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int ParentId = Int32.Parse(ContentModule.SelectedValue);
+            int childId = Int32.Parse(ContentTab.SelectedValue);
+            int Id = Int32.Parse(CarouselList.SelectedValue);
+            if (ParentId > 0 && childId > 0)
+            {
+                Child_SelectedIndexChanged(sender, e);
+
+                ShowCarousel(childId, Id);
+            }
+            else
+            {
+                Parent_SelectedIndexChanged(sender, e);
+
+                ShowCarousel(ParentId, Id);
+            }
+            CarouselList.SelectedValue = Id.ToString();
+        }
+
+        protected void ShowCarousel(int tabId, int Id)
+        {
+            var carousel = new ContentStagingController().GetCarousel(tabId, Id);
+            if (carousel.Count > 0)
+            {
+                CarouselId.Value = carousel[0].Id.ToString();
+                ////Label66.Visible = false;
+                ////CarouselCaption.Visible = false;
+                CarouselCaption.Text = carousel[0].Caption;
+                ////Label67.Visible = false;
+                ////CarouselDescription.Visible = false;
+                CarouselDescription.Text = carousel[0].Description;
+                ////Label68.Visible = false;
+                ////CarouselButton.Visible = false;
+                CarouselButton.Text = carousel[0].Button;
+                ////Label69.Visible = false;
+                ////CarouselLink.Visible = false;
+                CarouselLink.Text = carousel[0].Link;
+                ////Label70.Visible = false;
+                ////CarouselPosition.Visible = false;
+                CarouselPosition.Items.FindByValue((carousel[0].Position ? "1" : "0")).Selected = true;
+                ////Label71.Visible = false;
+                ////CarouselColor.Visible = false;
+                CarouselColor.Items.FindByValue((carousel[0].Color > 0 ? carousel[0].Color.ToString() : "0")).Selected = true;
+
+                CarouselImage.FilePath = carousel[0].Photo;
+
+                CarouselSave.Visible = false;
+                CarouselEdit.Visible = true;
+                CarouselDelete.Visible = true;
+            }
         }
     }
 }

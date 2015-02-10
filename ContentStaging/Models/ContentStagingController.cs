@@ -151,12 +151,24 @@ namespace Sentosa.Modules.ContentStaging.Models
             return CBO.FillCollection<CarouselPhoto>(DataProvider.Instance().ExecuteReader("GetCarouselPhotos", commonId)); //get by common id
         }
 
+        public IList<CarouselPhoto> GetCarousel(int commonId, int Id)
+        {
+            return CBO.FillCollection<CarouselPhoto>(DataProvider.Instance().ExecuteReader("GetCarouselPhotos", commonId)).Where(x => x.Id == Id).ToList(); //get by common id and id
+        }
+
         public void AddCarousel(CarouselPhoto carousel)
         {
             //return photo id
             carousel.Id = DataProvider.Instance().ExecuteScalar<int>("AddCarouselPhotos",
-                                                      carousel.CommonId,//common id
-                                                      carousel.Url//url
+                                                      carousel.CommonId,
+                                                      carousel.Url,
+                                                      carousel.Caption,
+                                                      carousel.Description,
+                                                      carousel.Button,
+                                                      carousel.Link,
+                                                      carousel.Position,
+                                                      carousel.Color,
+                                                      carousel.Photo
                                                         );
         }
 
@@ -164,6 +176,22 @@ namespace Sentosa.Modules.ContentStaging.Models
         {
             //return photo id
             carousel.Id = DataProvider.Instance().ExecuteScalar<int>("UpdateCarouselPhotos",
+                                                      carousel.Id,
+                                                      carousel.Url,
+                                                      carousel.Caption,
+                                                      carousel.Description,
+                                                      carousel.Button,
+                                                      carousel.Link,
+                                                      carousel.Position,
+                                                      carousel.Color,
+                                                      carousel.Photo
+                                                        );
+        }
+
+        public void UpdateOrderCarousel(CarouselPhoto carousel)
+        {
+            //return photo id
+            carousel.Id = DataProvider.Instance().ExecuteScalar<int>("UpdateOrderCarouselPhotos",
                                                       carousel.Id,//id
                                                       carousel.OrderCarousel//order
                                                         );

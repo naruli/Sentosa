@@ -141,20 +141,63 @@
             <h2 id="Carousel" class="dnnFormSectionHead"><a href="#">Carousel</a></h2>
             <fieldset class="dnnClear">
                 <div class="dnnFormItem">
-                    <dnn:Label ID="Label48" runat="server" Text="Image" /> 
+                    <dnn:Label ID="Label48" runat="server" Text="Image" />
+                    <asp:HiddenField ID="CarouselId" runat="server" />
                     <dnn:FilePicker ID="CarouselImage" runat="server" />
+                </div>
+                <div class="dnnFormItem">
+                    <dnn:Label ID="Label66" runat="server" Text="Caption" /> 
+                    <asp:TextBox ID="CarouselCaption" runat="server" />
+                </div>
+                <div class="dnnFormItem">
+                    <dnn:Label ID="Label67" runat="server" Text="Short Description" /> 
+                    <asp:TextBox ID="CarouselDescription" TextMode="MultiLine" runat="server" />
+                </div>
+                <div class="dnnFormItem">
+                    <dnn:Label ID="Label68" runat="server" Text="Button Label" /> 
+                    <asp:TextBox ID="CarouselButton" runat="server" />
+                </div>
+                <div class="dnnFormItem">
+                    <dnn:Label ID="Label69" runat="server" Text="Button Link Url" /> 
+                    <asp:TextBox ID="CarouselLink" runat="server" />
+                </div>
+                <div class="dnnFormItem">
+                    <dnn:label ID="Label70" runat="server" Text="Caption Position" />
+                    <asp:DropDownList id="CarouselPosition" runat="server">
+                        <asp:ListItem Value="0" Text="Left" Selected="True"></asp:ListItem>
+                        <asp:ListItem Value="1" Text="Right"></asp:ListItem>
+                    </asp:DropDownList>
+                </div>
+                <div class="dnnFormItem">
+                    <dnn:label ID="Label71" runat="server" Text="Caption Color" />
+                    <asp:DropDownList id="CarouselColor" runat="server">
+                        <asp:ListItem Value="0" Text="Black" Selected="True"></asp:ListItem>
+                        <asp:ListItem Value="1" Text="Orange"></asp:ListItem>
+                    </asp:DropDownList>
                 </div>
                 <div class="dnnFormItem">
                     <dnn:label ID="Label49" runat="server" Text="" />
                     <asp:Button ID="CarouselSave" CssClass="dnnPrimaryAction" OnClick="CarouselSave_Click" Text="Submit" runat="server" />
+                    <asp:Button ID="CarouselEdit" CssClass="dnnPrimaryAction" OnClick="CarouselEdit_Click" Text="Save" runat="server" />
                 </div>
-
                 <div class="dnnFormItem">
-                    <table id="CarouselTable" style="width:100%;border:1px solid black;text-align:center">
+                    <dnn:label ID="Label72" runat="server" Text="List Carousel" />
+                    <asp:DropDownList id="CarouselList" OnSelectedIndexChanged="CarouselList_SelectedIndexChanged" AutoPostBack="true" runat="server">
+               
+                    </asp:DropDownList>
+                </div>
+                <div class="dnnFormItem">
+                    <dnn:label ID="Label73" runat="server" Text="" />
+                    <asp:Button ID="CarouselDelete" CssClass="dnnPrimaryAction" OnClick="CarouselDelete_Click" Text="Delete" runat="server" />
+                </div>
+                <div class="dnnFormItem">
+                    <dnn:label ID="Label74" runat="server" Text="" />
+                    <table id="CarouselTable" style="width:50%;border:1px solid black;text-align:center">
                         <thead style="border:1px solid black;">
                             <tr>
-                                <td style="width:30%">Image Preview</td>
-                                <td style="width:70%">Action</td>
+                                <td style="width:60%">Image Preview</td>
+                                <td style="width:20%">Caption</td>
+                                <td style="width:20%">Order</td>
                             </tr>
                         </thead>
                         <tbody style="border:1px solid black;">
